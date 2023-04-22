@@ -1,0 +1,4 @@
+# Ignore build and IDE project
+build/
+.xmake/
+vsxmake2022/
