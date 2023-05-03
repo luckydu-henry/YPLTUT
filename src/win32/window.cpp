@@ -80,7 +80,7 @@ namespace yan {
         if (AdjustWindowRect(&wr, 13238272L, 0) == 0)
             throw WIN32_HWND_LASTERR();
 
-        DWORD WndStyle = _cfg.is_fullscreen == true ? WS_POPUP : 13565952L;
+        DWORD WndStyle = _cfg.is_fullscreen == true ? WS_POPUP : _cfg.style;
 
         _M_handle = CreateWindowExA(0, _M_name.data(),
             _M_name.data(), WndStyle, // style.
@@ -137,6 +137,10 @@ namespace yan {
     void win32_window::set_title(const char* _Name) {
         if (SetWindowTextA(_M_handle, _Name) == 0)
             throw WIN32_HWND_LASTERR();
+    }
+
+    void platform::win32_window::style(window_style _Style) {
+        SetWindowLongA(_M_handle, GWL_STYLE, _Style);
     }
 
     void win32_window::full_screen(bool _IsFullScreen) {
@@ -256,22 +260,16 @@ namespace yan {
         }
         // Button handle.
         case WM_LBUTTONDOWN:
-            km_handle._M_on_button(_G_press, button_e::left);
+        case WM_LBUTTONUP:
+            km_handle._M_on_button(button_e::left);
             break;
         case WM_RBUTTONDOWN:
-            km_handle._M_on_button(_G_press, button_e::right);
+        case WM_RBUTTONUP:
+            km_handle._M_on_button(button_e::right);
             break;
         case WM_MBUTTONDOWN:
-            km_handle._M_on_button(_G_press, button_e::middle);
-            break;
-        case WM_LBUTTONUP:
-            km_handle._M_on_button(_G_release, button_e::left);
-            break;
-        case WM_RBUTTONUP:
-            km_handle._M_on_button(_G_release, button_e::right);
-            break;
         case WM_MBUTTONUP:
-            km_handle._M_on_button(_G_release, button_e::middle);
+            km_handle._M_on_button(button_e::middle);
             break;
 
             // km_handle wheel handle.
@@ -297,9 +295,6 @@ namespace yan {
         // ================
         // ================
         // Let window to stop loop a input.
-        case WM_KILLFOCUS:
-            km_handle._M_first_state.reset();
-            break;
             // Set key input handle.
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
@@ -323,35 +318,20 @@ namespace yan {
                 else km_handle._M_mod_state[6] = true;
                 break;
                 // Especially for Escape because it doesn't work in the normal way!
-            case VK_ESCAPE:
-                if (!(lp & 0x40000000) || km_handle._M_is_auto_repeat == true) {
-                    km_handle._M_escape_event.is_pressed= true;
-                    km_handle._M_escape_event.is_released = false;
-                }
-                break;
             default:
                 if (!(lp & 0x40000000) || km_handle._M_is_auto_repeat == true)
-                    km_handle._M_on_key(_G_press, static_cast<unsigned char>(wp));
+                    km_handle._M_on_key(static_cast<unsigned char>(wp));
                 break;
             }
             break;
         case WM_KEYUP:
         case WM_SYSKEYUP:
-
             switch (wp) {
             case VK_SHIFT:
             case VK_MENU:
             case VK_CONTROL:
                 km_handle._M_mod_state.reset();
                 km_handle._M_mod_state[0] = true;
-                break;
-                // Especially for Escape because it doesn't work in the normal way!
-            case VK_ESCAPE:
-                km_handle._M_escape_event.is_pressed  = false;
-                km_handle._M_escape_event.is_released = true;
-                break;
-            default:
-                km_handle._M_on_key(_G_release, static_cast<unsigned char>(wp));
                 break;
             }
             break;

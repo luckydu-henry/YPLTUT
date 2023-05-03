@@ -6,6 +6,7 @@ namespace yan {
     struct wndconfig {
         int           width, height;
         const char*   title;
+        long long     style;
         bool          is_fullscreen;
         struct {
             unsigned char*  pixels;
@@ -13,6 +14,33 @@ namespace yan {
             int      channels;
         } icon, cursor;
     };
+
+    // I don't have enum for this, just use system style your self.
+    using window_style = long long;
+
+    namespace window_styles {
+        constexpr window_style win32_overlapped       = 0x00000000L;
+        constexpr window_style win32_popup            = 0x80000000L;
+        constexpr window_style win32_child            = 0x40000000L;
+        constexpr window_style win32_minimize         = 0x20000000L;
+        constexpr window_style win32_visible          = 0x10000000L;
+        constexpr window_style win32_disabled         = 0x08000000L;
+        constexpr window_style win32_clipsiblings     = 0x04000000L;
+        constexpr window_style win32_clipchildren     = 0x02000000L;
+        constexpr window_style win32_maximize         = 0x01000000L;
+        constexpr window_style win32_caption          = 0x00C00000L;
+        constexpr window_style win32_border           = 0x00800000L;
+        constexpr window_style win32_dlgframe         = 0x00400000L;
+        constexpr window_style win32_vscroll          = 0x00200000L;
+        constexpr window_style win32_hscroll          = 0x00100000L;
+        constexpr window_style win32_sysmenu          = 0x00080000L;
+        constexpr window_style win32_thickframe       = 0x00040000L;
+        constexpr window_style win32_group            = 0x00020000L;
+        constexpr window_style win32_tabstop          = 0x00010000L;
+        constexpr window_style win32_minimizebox      = 0x00020000L;
+        constexpr window_style win32_maximizebox      = 0x00010000L;
+    }
+
 
     enum screen_prop : unsigned char {
         scrwidth = 1, scrheight 
@@ -39,6 +67,7 @@ namespace yan {
         std::size_t            get_size(screen_prop _Enum) const noexcept;
 
         // extended window framework
+        void                   style(window_style _Style);
         void                   full_screen(bool _IsFullScreen);
         constexpr bool         full_screen() const noexcept;
         void                   cursor_display(bool _ShouldDisplay);

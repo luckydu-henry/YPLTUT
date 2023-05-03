@@ -52,6 +52,13 @@ namespace yan {
 
     // extention methods
     template <class _Sub_window>
+    void basic_window<_Sub_window>::style(window_style _Style) {
+        EXTENDED_METHOD_OPERATION(
+            _Sub_window, style(),
+            _M_inst->style(_Style), "Style setter not supported!"
+        );
+    }
+    template <class _Sub_window>
     void basic_window<_Sub_window>::full_screen(bool _IsFullScreen) {
         EXTENDED_METHOD_OPERATION(
             _Sub_window,

@@ -30,6 +30,7 @@ namespace yan {
             void         set_cursor(unsigned char* _Pixels, int _width, int _height, int _Channel);
             void         show(void);
             void         set_title(const char* _Name);
+            void         style(window_style _Style);
             void         full_screen(bool _IsFullScreen);
             bool         full_screen(void) const;
             void         cursor_display(bool _ShouldDisplay);
