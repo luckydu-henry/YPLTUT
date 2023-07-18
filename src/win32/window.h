@@ -1,24 +1,15 @@
 #ifndef _WIN32_WINDOW_H_
 #define _WIN32_WINDOW_H_
 
-#include <pltut/except.h>
-#include <pltut/window.h>
+#include <plat/exception.hpp>
+#include <plat/window.hpp>
+#include "../event_impl.h"
 #include <Windows.h>
 
-namespace yan {
+namespace crs {
+    namespace plat {
 
-    namespace platform {
-        class win32_exception : public except {
-            HRESULT _M_result;
-        public:
-            win32_exception(std::source_location Loc, HRESULT hr) noexcept;
-
-            const char* what()     const noexcept override;
-            std::string_view     err_type() const noexcept override;
-            void                 trans_hresult();
-        };
-
-        class YAN_API win32_window {
+        class win32_window {
             win32_window(const win32_window&) = delete;
             win32_window(win32_window&&) = delete;
             win32_window& operator=(const win32_window&) = delete;
@@ -26,52 +17,67 @@ namespace yan {
 
             win32_window(const wndconfig&);
 
-            void         set_icon  (unsigned char* _Pixels, int _width, int _height, int _Channel);
-            void         set_cursor(unsigned char* _Pixels, int _width, int _height, int _Channel);
-            void         show(void);
-            void         set_title(const char* _Name);
-            void         style(window_style _Style);
-            void         full_screen(bool _IsFullScreen);
-            bool         full_screen(void) const;
-            void         cursor_display(bool _ShouldDisplay);
-            bool         cursor_display(void) const;
-            void         close(bool _IsShouldClose);
-            bool         close(void) const;
-            void*        native_handle(void);
-            void         poll_events(void);
-            kminput&     kmhandle();
+            void             show(void);
+            // 图标和指针不支持获取，只能设置
+            void             set_icon  (const wndimage& img);
+            void             set_cursor(const wndimage& img);
 
-            std::size_t  get_size(screen_prop _Enum);
+            // 设置器和获取器
+            void             title(const char* _Name);
+            const char*      title() const;
+            void             style(styles _Style);
+            styles           style() const;
+            void             cursor_display(bool _ShouldDisplay);
+            bool             cursor_display(void) const;
+            void             close(bool _IsShouldClose);
+            bool             close(void) const;
+            void             auto_repeat(bool);
+            bool             auto_repeat() const;
+            _Detail::pairsz  size() const;
+            void             size(_Detail::pairsz);
 
-            static const std::uint32_t get_screenprop(screen_prop _Enum);
+            void*            native_handle(void);
+
+            // 这两个特殊函数是从 event_impl 伪继承来的，对外并不暴露
+            inline void  push_event(wevent& E)            { CRS_PLAT_EVENT_IMPL_PUSH_EVENT(E); }
+            inline bool  pop_event(wevent& E, bool block) { CRS_PLAT_EVENT_IMPL_POP_EVENT(E, block); }
 
             ~win32_window();
-
-            kminput  km_handle;
-
+        // 被保护的内容使用事件继承
+        protected:
+            // 伪宏继承
+            CRS_INHERITAGE_EVENT_IMPL;
         private:
-            static LRESULT CALLBACK _M_HandleMsgSetup(HWND, UINT, WPARAM, LPARAM) noexcept;
-            static LRESULT CALLBACK _M_HandleMsgThunk(HWND, UINT, WPARAM, LPARAM) noexcept;
-            LRESULT _M_HandleMsg(HWND, UINT, WPARAM, LPARAM);
 
-            // attribute varibiles.
-            std::pair<int, int> _M_wndsize;
-            std::string_view    _M_name;
-            HCURSOR             _M_cur;
-            HINSTANCE           _M_inst;
-            HWND                _M_handle;
+            static LRESULT CALLBACK m_HandleMsgSetup(HWND, UINT, WPARAM, LPARAM) noexcept;
+            static LRESULT CALLBACK m_HandleMsgThunk(HWND, UINT, WPARAM, LPARAM) noexcept;
 
-            // window counts.
-            static uint8_t _S_inst_count;
+            LRESULT m_handle_msg(HWND, UINT, WPARAM, LPARAM); // 实际的系统消息处理
+            void    m_process_events();
+            void    m_grab_cursor(bool);
+            void    m_set_tracking(bool);
+            void    m_to_fullscreen();
 
-            // state check varibiles.
-            bool _M_is_cursor_display = false;
-            bool _M_is_full_screen = false;
-            bool _M_shoule_close = false;
+
+            HWND                m_handle;
+            HCURSOR             m_cur;
+            HICON               m_ico;
+            HINSTANCE           m_inst;
+            DWORD               m_wnd_style;
+            styles              m_style;
+            std::size_t         m_bbp;
+            char16_t            m_surrogate = 0;
+            bool                m_is_msinside          = false;
+            bool                m_is_cursor_grabbed    = false;
+            bool                m_is_resizing          = false;
+            bool                m_is_cursor_display    = false;
+            bool                m_is_full_screen       = false;
+            bool                m_is_close             = false;
+            bool                m_is_auto_repeated     = false;
+            std::string_view    m_name;
+            _Detail::pairsz     m_last_size;
 
         };
     }
-} // namespace yan;
-#define WIN32_HWND_EXCEPT(hr) win32_exception(std::source_location::current(), hr)
-#define WIN32_HWND_LASTERR()  win32_exception(std::source_location::current(), GetLastError())
+} // namespace crs;
 #endif //! _WIN32_WINDOW_H_

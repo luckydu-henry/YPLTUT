@@ -1,8 +1,8 @@
-#ifndef _WIN32_GL3_CONTEXT_H_
-#define _WIN32_GL3_CONTEXT_H_
+#pragma once
+#define GL_CONTEXT_IMPL // 让 API 能够使用 OpenGL 实现
 
-#include <pltut/context.h>
-#include <pltut/except.h>
+#include <plat/gfx_context.hpp>
+#include <plat/exception.hpp>
 
 #include <Windows.h>
 #include "wgl.h"
@@ -23,32 +23,19 @@ namespace {
     constexpr unsigned int ERROR_INVALID_PROFILE_ARB                  =  0x2096;
 }
 
-namespace yan {
-
-    class wgl_exception : public except {
-    public:
-        wgl_exception(std::source_location _Loc, std::string_view _des) noexcept;
-    };
-
-    namespace platform {
-
-        class YAN_API win32_gl_rndr {
+namespace crs {
+    namespace plat {
+        class gl_context_impl {
         public:
-            win32_gl_rndr(int _Major, int _Minor);
-
-            void        init_on_handle(void* _Handle)           ;
-            void        swap_frame(void)                        ;
-            void        clear_color(float R, float G, float B)  ;
-
-            ~win32_gl_rndr();
+            gl_context_impl(const opengl_config& cfg);
+            void init_on_handle(void*);
+            ~gl_context_impl();
         private:
-            HWND       _M_hwnd;
-            HDC        _M_device;
-            HGLRC      _M_GLcontext;
-
-            int _M_ajor, _M_inor;
+            HWND       m_hwnd;
+            HDC        m_device;
+            HGLRC      m_GLcontext;
+            // 版本号
+            int m_major, m_minor;
         };
     }
 }
-#define WGL_EXCEPT(des) wgl_exception(std::source_location::current(), des)
-#endif // !_WIN32_GL_CONTEXT_H_
