@@ -7,12 +7,12 @@
 namespace crs {
     namespace plat {
 #if CRS_ISOS_WIN32
-        void resolution(_Detail::pairsz sz, std::size_t depth) {
+        void resolution(_Detail::pairsz sz) {
             DEVMODE devMode{};
             devMode.dmSize       = sizeof(devMode);
             devMode.dmPelsWidth  = sz.first;
             devMode.dmPelsHeight = sz.second;
-            devMode.dmBitsPerPel = depth;
+            devMode.dmBitsPerPel = 32;
             devMode.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT | DM_BITSPERPEL;
 
             if (ChangeDisplaySettingsA(&devMode, 0) != DISP_CHANGE_SUCCESSFUL)

@@ -4,17 +4,21 @@
 #define USE_VULKAN false
 
 #define CRS_ISOS_WIN32   false
-#define CRS_ISOS_UNIX   false
+#define CRS_ISOS_UNIX    false
 #define CRS_ISOS_APPLE   false
 #define CRS_ISOS_ANDROID false
 
 #if     defined _WIN32 or _WIN64
+#undef  CRS_ISOS_WIN32
 #define CRS_ISOS_WIN32 true
 #elif   defined __unix__
+#undef  CRS_ISOS_UNIX
 #define CRS_ISOS_UNIX true
 #elif   defined __APPLE__
+#undef  CRS_ISOS_APPLE
 #define CRS_ISOS_APPLE true
 #elif   defined __ANDROID__
+#undef  CRS_ISOS_ANDROID
 #define CRS_ISOS_ANDROID true
 #endif
 
@@ -47,9 +51,7 @@ namespace crs {
 #endif
         // 渲染 API 类型，这些类型可以多个混合，但是必须是同一平台共同支持的。
         // 不然压根不能通过编译
-        class d3d11_context_impl;
         class gl_context_impl;
         class vk_context_impl;
-        class metal_context_impl;
     }
 }

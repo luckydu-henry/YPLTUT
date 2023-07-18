@@ -22,7 +22,6 @@ namespace crs {
         struct wndconfig {
             std::size_t   width;
             std::size_t   height;
-            std::size_t   depth;
             const char*   title;
             styles        style;
             wndimage      icon, cursor;

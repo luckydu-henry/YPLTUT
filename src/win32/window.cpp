@@ -184,7 +184,6 @@ namespace crs {
         m_name              (cfg.title),
         m_cur               (nullptr),
         m_ico               (nullptr),
-        m_bbp               (cfg.depth),
         m_last_size         ({cfg.width, cfg.height }),
         m_is_full_screen    ((cfg.style & styles::fullscreen) != 0),
         m_is_cursor_grabbed ((cfg.style & styles::fullscreen) != 0),

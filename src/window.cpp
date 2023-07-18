@@ -96,7 +96,6 @@ namespace crs {
             EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &win32Mode);
             cfg.width  = win32Mode.dmPelsWidth;
             cfg.height = win32Mode.dmPelsHeight;
-            cfg.depth  = win32Mode.dmBitsPerPel;
 #endif
             return cfg;
         }

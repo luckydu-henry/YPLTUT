@@ -29,6 +29,8 @@ namespace crs {
         public:
             gl_context_impl(const opengl_config& cfg);
             void init_on_handle(void*);
+            void swap_buffers();
+            void clear_color(float r, float g, float b);
             ~gl_context_impl();
         private:
             HWND       m_hwnd;

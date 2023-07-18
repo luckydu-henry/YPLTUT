@@ -11,12 +11,12 @@ namespace {
 
 namespace crs {
     namespace plat {
-
-        gl_context_impl::gl_context_impl(const opengl_config& cfg)
-            :m_hwnd(nullptr), m_device(nullptr), m_GLcontext(nullptr),
+        gl_context_impl::gl_context_impl(const opengl_config& cfg) :
+            m_hwnd(nullptr), m_device(nullptr), m_GLcontext(nullptr),
             m_major(cfg.major), m_minor(cfg.minor) {}
 
         void gl_context_impl::init_on_handle(void* _Handle) {
+
             m_hwnd = static_cast<HWND>(_Handle);
             m_device = GetDC(m_hwnd);
 
@@ -25,10 +25,10 @@ namespace crs {
                 throw CRS_EXCEPTION("Failed to open device!");
             }
             // Set the pixel format for the device context:
-            PIXELFORMATDESCRIPTOR pfd = { };
-            pfd.nSize = sizeof(pfd);
-            pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);  // Set the size of the PFD to the size of the class
-            pfd.dwFlags = PFD_DOUBLEBUFFER | PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW;   // Enable double buffering
+            PIXELFORMATDESCRIPTOR pfd{};
+            pfd.nSize      = sizeof(pfd);
+            pfd.nSize      = sizeof(PIXELFORMATDESCRIPTOR);  // Set the size of the PFD to the size of the class
+            pfd.dwFlags    = PFD_DOUBLEBUFFER | PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW;   // Enable double buffering
             pfd.iPixelType = PFD_TYPE_RGBA; // Set our application to use RGBA pixels
             pfd.cColorBits = 32;        // Give 32 bits of color information (the higher, the more colors)
             pfd.cDepthBits = 32;        // Give 32 bits of depth information (the higher, the more depth levels)
@@ -40,13 +40,11 @@ namespace crs {
                 DestroyWindow(m_hwnd);
                 throw CRS_EXCEPTION("Failed to set a compatible pixel format!");
             }
-
-            if (m_major < 3)
-            {
+            // °æ±¾µÍÓÚ 3.3
+            if (m_major < 3 and m_minor < 3) {
                 m_GLcontext = wglCreateContext(m_device);
                 wglMakeCurrent(m_device, m_GLcontext);
-                if (!gladLoaderLoadWGL(m_device))
-                    throw CRS_EXCEPTION("WGL load error!");
+                if (!gladLoaderLoadWGL(m_device)) throw CRS_EXCEPTION("WGL load error!");
                 return;
             }
 
@@ -83,16 +81,22 @@ namespace crs {
 
                 throw CRS_EXCEPTION("Failed to create the final rendering context!");
             }
+
             wglMakeCurrent(nullptr, nullptr);
             wglDeleteContext(temp_context);
             wglMakeCurrent(m_device, m_GLcontext);
         }
 
+        void gl_context_impl::swap_buffers() {
+            SwapBuffers(m_device);
+        }
+        void gl_context_impl::clear_color(float r, float g, float b) {
+            glClear(GL_COLOR_BUFFER_BIT);
+            glClearColor(r, g, b, 1.f);
+        }
         gl_context_impl::~gl_context_impl() {
-            if (m_GLcontext)
-                wglDeleteContext(m_GLcontext);
-            if (m_device)
-                ReleaseDC(m_hwnd, m_device);
+            if (m_GLcontext) wglDeleteContext(m_GLcontext);
+            if (m_device)    ReleaseDC(m_hwnd, m_device);
         }
     }
 }

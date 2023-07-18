@@ -10,14 +10,17 @@ file(GLOB COMMON_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/**/*.hpp" )
 if    (WIN32)
     message("当前平台为 win32")
     file(GLOB PLAT_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/win32/*.*")
+    set(LINK_LIST "OpenGL32")
 elseif(UNIX)
     message("当前平台为 unix")
     file(GLOB PLAT_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src/unix/*.*")
+    set(LINK_LIST "GL")
 endif (WIN32)
 
 # CRS_plat 只可以静态链接，因为这个库体量挺小的而且可以避免动态链接的一些问题。
 add_library(CRS_plat_lib STATIC ${COMMON_SRC} ${COMMON_HEADERS} ${PLAT_SRC})
 target_include_directories(CRS_plat_lib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_link_libraries(CRS_plat_lib PUBLIC ${LINK_LIST})
 target_compile_features(CRS_plat_lib PUBLIC cxx_std_20)
 
 # 测试用来检测库是否能够正常工作。

@@ -65,7 +65,6 @@ namespace crs {
             HINSTANCE           m_inst;
             DWORD               m_wnd_style;
             styles              m_style;
-            std::size_t         m_bbp;
             char16_t            m_surrogate = 0;
             bool                m_is_msinside          = false;
             bool                m_is_cursor_grabbed    = false;
