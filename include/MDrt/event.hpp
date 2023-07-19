@@ -2,8 +2,8 @@
 #include "config.hpp"
 #include "keyboard.hpp"
 #include "mouse.hpp"
-namespace crs {
-    namespace plat {
+namespace CRS {
+    namespace MDrt {
         // 这个类用来进行与窗口有关的事件处理
         // 所有的事件类型，末尾都跟随有一个 e 标识
         class wevent {

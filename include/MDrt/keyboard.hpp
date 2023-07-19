@@ -1,7 +1,7 @@
 #pragma once
 #include "config.hpp"
-namespace crs {
-    namespace plat {
+namespace CRS {
+    namespace MDrt {
         // (Keyboard) 键盘类
         // 用来处理与键盘输入还有按键编码的相关功能
         // 这个类并不适合做文本处理，如果需要做文本处理，还有其它类提供了额外的输入功能。

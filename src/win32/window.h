@@ -1,13 +1,13 @@
 #ifndef _WIN32_WINDOW_H_
 #define _WIN32_WINDOW_H_
 
-#include <plat/exception.hpp>
-#include <plat/window.hpp>
+#include <MDrt/exception.hpp>
+#include <MDrt/window.hpp>
 #include "../event_impl.h"
 #include <Windows.h>
 
-namespace crs {
-    namespace plat {
+namespace CRS {
+    namespace MDrt {
 
         class win32_window {
             win32_window(const win32_window&) = delete;
@@ -78,5 +78,5 @@ namespace crs {
 
         };
     }
-} // namespace crs;
+} // namespace CRS;
 #endif //! _WIN32_WINDOW_H_

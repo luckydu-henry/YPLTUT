@@ -1,11 +1,11 @@
-#include <plat/functions.hpp>
+#include <MDrt/functions.hpp>
 #include <utility>
 #if  CRS_ISOS_WIN32
 #    include <windows.h>
 #endif
 
-namespace crs {
-    namespace plat {
+namespace CRS {
+    namespace MDrt {
 #if CRS_ISOS_WIN32
         void resolution(_Detail::pairsz sz) {
             DEVMODE devMode{};

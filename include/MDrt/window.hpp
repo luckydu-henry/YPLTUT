@@ -2,8 +2,8 @@
 #include "event.hpp"
 #include <utility>
 
-namespace crs {
-    namespace plat {
+namespace CRS {
+    namespace MDrt {
         // 用于 鼠标指针 窗口图标 还有按钮等等的图片格式。
         struct wndimage {
             std::byte*    pixels;
@@ -64,4 +64,4 @@ namespace crs {
         using window = basic_window<plat_window>;
     }
 
-}//! namespace crs.
+}//! namespace CRS.

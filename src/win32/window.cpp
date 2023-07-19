@@ -5,13 +5,13 @@
 // 全局空间内的函数
 namespace {
 
-static constexpr const char*    Class_name = "CRS_plat_window";
+static constexpr const char*    Class_name = "CRS_MDrt_window";
 static std::size_t              Instance_count = 0;        
 
 // 这个函数可以通过图片的原始数据，即内存缓冲来创建 HICON
 // HICON 可以被用于 cursor 或者 window-icon 的设置
 // Windows HICON 使用的是 BGRA 这步是在转换。
-static HICON make_ico(const crs::plat::wndimage& img) {
+static HICON make_ico(const CRS::MDrt::wndimage& img) {
     std::pmr::vector<std::byte> iconPixels(img.width * img.height * 4);
     for (std::size_t i = 0; i < iconPixels.size() >> 2; ++i)
     {
@@ -24,8 +24,8 @@ static HICON make_ico(const crs::plat::wndimage& img) {
     return CreateIcon(GetModuleHandleW(nullptr), img.width, img.height, 1, 32, nullptr, reinterpret_cast<BYTE*>(&iconPixels[0]));
 }
 
-static inline crs::plat::kybd::kc trans_virtual_kc(WPARAM key, LPARAM flags) {
-    using namespace crs::plat;
+static inline CRS::MDrt::kybd::kc trans_virtual_kc(WPARAM key, LPARAM flags) {
+    using namespace CRS::MDrt;
     switch (key) {
         // Check the scancode to distinguish between left and right shift
         case VK_SHIFT: {
@@ -174,8 +174,8 @@ static inline void utf16to32(char16_t* begin, char16_t* end, char32_t* out) {
 }
 } // namespace anoymous
 
-namespace crs {
-    namespace plat {
+namespace CRS {
+    namespace MDrt {
 
         win32_window::win32_window(const wndconfig& cfg) :
         m_inst              (GetModuleHandle(nullptr)),
@@ -734,4 +734,4 @@ namespace crs {
             return m_handle;
         }
     }
-} // namespace crs.
+} // namespace CRS.

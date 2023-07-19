@@ -5,8 +5,8 @@
 #include <string_view>
 #include <source_location>
 
-namespace crs {
-    namespace plat {
+namespace CRS {
+    namespace MDrt {
         class exception : public std::exception {
         public:
             exception(std::source_location loc, std::string_view errStr) noexcept;
@@ -19,4 +19,4 @@ namespace crs {
     }
 }
 // 宏可以让问题变简单
-#define CRS_EXCEPTION(errStr) ::crs::plat::exception(std::source_location::current(), errStr);
+#define CRS_EXCEPTION(errStr) ::CRS::MDrt::exception(std::source_location::current(), errStr);

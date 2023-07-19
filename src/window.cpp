@@ -1,4 +1,4 @@
-#include <plat/window.hpp>
+#include <MDrt/window.hpp>
 #include <iostream>
 
 #if   CRS_ISOS_WIN32
@@ -7,8 +7,8 @@
 #include "linux/window.h"
 #endif
 
-namespace crs {
-    namespace plat {
+namespace CRS {
+    namespace MDrt {
 
         template class basic_window<plat_window>;
 

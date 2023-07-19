@@ -32,8 +32,8 @@ namespace _Detail {
 }
 // 命名空间内部声明了一些基础类，这些类通过特殊的“模板封装”技术来使用
 // 无关平台的体验，接口也不是真正的接口，而是 C++20 特性下的"伪接口"
-namespace crs {
-    namespace plat {
+namespace CRS {
+    namespace MDrt {
         // 用来进行模板操作的窗口类型
         class win32_window;
         class x11_window;
@@ -51,7 +51,7 @@ namespace crs {
 #endif
         // 渲染 API 类型，这些类型可以多个混合，但是必须是同一平台共同支持的。
         // 不然压根不能通过编译
-        class gl_context_impl;
+        class GL_context_impl;
         class vk_context_impl;
     }
 }

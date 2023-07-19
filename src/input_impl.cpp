@@ -1,10 +1,10 @@
-#include <plat/keyboard.hpp>
-#include <plat/mouse.hpp>
+#include <MDrt/keyboard.hpp>
+#include <MDrt/mouse.hpp>
 #if    CRS_ISOS_WIN32
 #include <windows.h>
 #endif  
-namespace crs {
-    namespace plat {
+namespace CRS {
+    namespace MDrt {
 #if    CRS_ISOS_WIN32
         const bool kybd::is_pressed(kybd::kc key) {
             char32_t vkey = 0;

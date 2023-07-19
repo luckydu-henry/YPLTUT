@@ -1,7 +1,7 @@
-#include <plat/exception.hpp>
+#include <MDrt/exception.hpp>
 #include <format>
-namespace crs {
-    namespace plat {
+namespace CRS {
+    namespace MDrt {
         exception::exception(std::source_location loc, std::string_view errStr) noexcept:
         m_location(loc),
         m_what("") {

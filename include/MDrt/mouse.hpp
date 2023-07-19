@@ -1,7 +1,7 @@
 #pragma once
 #include "config.hpp"
-namespace crs {
-    namespace plat {
+namespace CRS {
+    namespace MDrt {
         // 这是一个缩写，会用这个缩写的原因是 se 念快些就会近似 z 的发音
         // 缩写可以让其与其它 API 的编码长度对其，增强代码的可读性和美感
         class mouz {

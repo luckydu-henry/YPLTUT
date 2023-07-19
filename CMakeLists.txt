@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(CRS_plat VERSION 1.0
+project(CRS_MDrt VERSION 1.0
                  DESCRIPTION "Platform specific window and graphics and audio creation wrapper."
                  LANGUAGES C CXX)
 # 针对所有平台都应添加的源文件。
@@ -17,16 +17,16 @@ elseif(UNIX)
     set(LINK_LIST "GL")
 endif (WIN32)
 
-# CRS_plat 只可以静态链接，因为这个库体量挺小的而且可以避免动态链接的一些问题。
-add_library(CRS_plat_lib STATIC ${COMMON_SRC} ${COMMON_HEADERS} ${PLAT_SRC})
-target_include_directories(CRS_plat_lib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_link_libraries(CRS_plat_lib PUBLIC ${LINK_LIST})
-target_compile_features(CRS_plat_lib PUBLIC cxx_std_20)
+# CRS_ MDrt 只可以静态链接，因为这个库体量挺小的而且可以避免动态链接的一些问题。
+add_library               (CRS_MDrt_lib STATIC ${COMMON_SRC} ${COMMON_HEADERS} ${PLAT_SRC})
+target_include_directories(CRS_MDrt_lib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_link_libraries     (CRS_MDrt_lib PUBLIC ${LINK_LIST})
+target_compile_features   (CRS_MDrt_lib PUBLIC cxx_std_20)
 
 # 测试用来检测库是否能够正常工作。
-add_executable(CRS_plat_test "test/window_test.cpp")
-target_include_directories(CRS_plat_test PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_compile_features(CRS_plat_test PUBLIC cxx_std_20)
-target_link_libraries(CRS_plat_test PUBLIC CRS_plat_lib)
+add_executable            (CRS_MDrt_test "test/window_test.cpp")
+target_include_directories(CRS_MDrt_test PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_compile_features   (CRS_MDrt_test PUBLIC cxx_std_20)
+target_link_libraries     (CRS_MDrt_test PUBLIC CRS_MDrt_lib)
 
 message("配置完成!")

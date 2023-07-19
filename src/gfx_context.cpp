@@ -1,4 +1,4 @@
-#include <plat/gfx_context.hpp>
+#include <MDrt/gfx_context.hpp>
 #include <exception>
 #include <stdexcept>
 
@@ -10,10 +10,10 @@
 #endif
 
 
-namespace crs {
-    namespace plat {
+namespace CRS {
+    namespace MDrt {
         // 只有跨平台渲染 API 才受到该支持
-        template class basic_gfx_context<gl_context_impl, opengl_config>;
+        template class basic_gfx_context<GL_context_impl, OpenGL_config>;
 #if defined VK_CONTEXT_IMPL
         template class basic_gfx_context<vk_context_impl, vulkan_config>;
 #endif
@@ -31,6 +31,10 @@ namespace crs {
         template<class GfxCtxT, typename CfgT>
         void basic_gfx_context<GfxCtxT, CfgT>::clear_color(float r, float g, float b) {
             m_inst->clear_color(r,g,b);
+        }
+        template<class GfxCtxT, typename CfgT>
+        const char* basic_gfx_context<GfxCtxT, CfgT>::version() {
+            return m_inst->version();
         }
         template<class GfxCtxT, class CtxCfgT>
         basic_gfx_context<GfxCtxT, CtxCfgT>::~basic_gfx_context() {
